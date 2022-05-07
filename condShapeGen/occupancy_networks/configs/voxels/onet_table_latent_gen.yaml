@@ -1,0 +1,8 @@
+inherit_from: occupancy_networks/configs/voxels/onet_table_latent.yaml
+test:
+  threshold: 0.20
+  model_file: model_best.pt
+generation:
+  generation_dir: generation
+  generate_mesh: False
+  generate_embed: True

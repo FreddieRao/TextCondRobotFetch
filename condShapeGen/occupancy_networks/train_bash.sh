@@ -1,0 +1,1 @@
+python occupancy_networks/train.py occupancy_networks/configs/voxels/$1.yaml
