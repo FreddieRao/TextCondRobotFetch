@@ -1,7 +1,0 @@
-inherit_from: occupancy_networks/configs/voxels/onet_chair_norm.yaml
-test:
-  model_file: model_best.pt
-generation:
-  generation_dir: generation
-  generate_mesh: True
-  generate_embed: True

@@ -1,8 +1,0 @@
-inherit_from: occupancy_networks/configs/voxels/onet_chair.yaml
-test:
-  model_file: model_best.pt
-generation:
-  resolution_0: 128 # useful for thin structure
-  generation_dir: generation
-  generate_mesh: False
-  generate_embed: True
