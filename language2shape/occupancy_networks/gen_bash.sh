@@ -1,0 +1,1 @@
+python occupancy_networks/generate.py occupancy_networks/configs/pointcloud/onet_pretrained.yaml

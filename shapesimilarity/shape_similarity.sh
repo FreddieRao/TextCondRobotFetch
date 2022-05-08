@@ -1,0 +1,1 @@
+bash inference_smiliarity.py

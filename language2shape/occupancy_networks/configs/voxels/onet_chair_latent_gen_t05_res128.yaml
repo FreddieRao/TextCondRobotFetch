@@ -1,0 +1,29 @@
+inherit_from: occupancy_networks/configs/voxels/onet_chair_latent.yaml
+test:
+  threshold: 0.05
+  model_file: model_best.pt
+generation:
+  refine: False
+  refinement_step: 0
+  resolution_0: 128 # useful for thin structure
+  upsampling_steps: 2 # a good sign
+  generation_dir: generation
+  generate_mesh: False
+  generate_embed: True
+  n_x: 128
+  n_z: 1
+  batch_size: 100000
+  vis_n_outputs: 30
+  generate_mesh: true
+  generate_pointcloud: true
+  generation_dir: generation
+  use_sampling: false
+  simplify_nfaces: null
+  copy_groundtruth: false
+  copy_input: true
+  latent_number: 4
+  latent_H: 8
+  latent_W: 8
+  latent_ny: 2
+  latent_nx: 2
+  latent_repeat: true

@@ -1,0 +1,3 @@
+Namespace(DUMP_DIR='inference_sunrgbd', ap_iou_thresholds='0.25,0.5', batch_size=8, checkpoint_path='demo_files/pretrained_votenet_on_sunrgbd.tar', cluster_sampling='seed_fps', conf_thresh=0.05, dataset='sunrgbd', dump_dir='inference_sunrgbd', faster_eval=False, model='votenet', nms_iou=0.25, no_height=False, num_point=20000, num_target=256, per_class_proposal=False, shuffle_dataset=False, use_3d_nms=True, use_cls_nms=True, use_color=False, use_old_type_nms=False, use_sunrgbd_v2=False, vote_factor=1)
+Loaded checkpoint demo_files/pretrained_votenet_on_sunrgbd.tar (epoch: 180)
+2022-05-07 00:48:37.770351
