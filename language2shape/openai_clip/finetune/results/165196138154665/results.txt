@@ -1,0 +1,148 @@
+{'act_f': 'tanh',
+ 'batch_size': 1024,
+ 'cate': 'chair',
+ 'clip_img_feat_path': 'data/clip_img_feat_1view_texture_ground_keyshot.pickle',
+ 'clip_txt_feat_path': 'data/clip_txt_feat_text2shape.pickle',
+ 'constrast_loader': True,
+ 'coslr': True,
+ 'device': device(type='cuda', index=0),
+ 'h_features': 512,
+ 'image_folder': 'occupancy_networks/data/ShapeNet/03001627/',
+ 'l2norm': True,
+ 'log_interval': 10,
+ 'logit_scale': 1,
+ 'loss_name_list': 'scontrast_cos_disdiv',
+ 'loss_weights': '0.9_0.09_0.01',
+ 'lr': 0.0064,
+ 'lrelu': 0.01,
+ 'n_dataset': 'ClipText2Image',
+ 'n_epochs': 32,
+ 'n_model': 'B_MLPS',
+ 'norm': 'LN',
+ 'num_layers': 1,
+ 'opt': 'adamw',
+ 'orthogonal': False,
+ 'output_dir': 'openai_clip/finetune/results/165196138154665',
+ 'restore_file': None,
+ 'results_file': 'openai_clip/finetune/results/165196138154665/results.txt',
+ 's1_restore_file': None,
+ 'seed': 42,
+ 'split_by_text': False,
+ 'start_epoch': 0,
+ 'total_step': 0,
+ 'warmup_step': 400,
+ 'wd': 1e-05}
+B_MappingNetwork(
+  (t_layers): Sequential(
+    (t_layer_0): FullyConnectedLayer(
+      (fc): Linear(in_features=512, out_features=512, bias=True)
+      (norm): LayerNorm((512,), eps=1e-05, elementwise_affine=True)
+      (activation_f): Tanh()
+    )
+  )
+  (i_layers): Sequential(
+    (i_layer_0): FullyConnectedLayer(
+      (fc): Linear(in_features=512, out_features=512, bias=True)
+      (norm): LayerNorm((512,), eps=1e-05, elementwise_affine=True)
+      (activation_f): Tanh()
+    )
+  )
+)
+Evaluate (epoch 0) -- val loss = 6.14240789.
+Evaluate R@P1 = 0.0018.R@P10 = 0.0150.
+Evaluate (epoch 0) -- val loss = 5.96544933.
+Evaluate R@P1 = 0.0223.R@P10 = 0.1179.
+Best Eval R@P1 is 0.022262334536702767 Best Eval R@P10 is 0.11793020457280386
+Evaluate (epoch 1) -- val loss = 5.78683138.
+Evaluate R@P1 = 0.0376.R@P10 = 0.1781.
+Best Eval R@P1 is 0.037605294825511434 Best Eval R@P10 is 0.17809867629362214
+Evaluate (epoch 2) -- val loss = 5.72928143.
+Evaluate R@P1 = 0.0412.R@P10 = 0.1986.
+Best Eval R@P1 is 0.04121540312876053 Best Eval R@P10 is 0.19855595667870035
+Evaluate (epoch 3) -- val loss = 5.69722795.
+Evaluate R@P1 = 0.0421.R@P10 = 0.2064.
+Best Eval R@P1 is 0.0421179302045728 Best Eval R@P10 is 0.20637785800240674
+Evaluate (epoch 4) -- val loss = 5.66579247.
+Evaluate R@P1 = 0.0469.R@P10 = 0.2208.
+Best Eval R@P1 is 0.04693140794223827 Best Eval R@P10 is 0.22081829121540314
+Evaluate (epoch 5) -- val loss = 5.63242912.
+Evaluate R@P1 = 0.0520.R@P10 = 0.2307.
+Best Eval R@P1 is 0.05204572803850782 Best Eval R@P10 is 0.23074608904933816
+Evaluate (epoch 6) -- val loss = 5.59985828.
+Evaluate R@P1 = 0.0526.R@P10 = 0.2392.
+Best Eval R@P1 is 0.05264741275571601 Best Eval R@P10 is 0.23916967509025272
+Evaluate (epoch 7) -- val loss = 5.55724955.
+Evaluate R@P1 = 0.0566.R@P10 = 0.2392.
+Best Eval R@P1 is 0.056558363417569195 Best Eval R@P10 is 0.23916967509025272
+Evaluate (epoch 8) -- val loss = 5.51366901.
+Evaluate R@P1 = 0.0520.R@P10 = 0.2413.
+Best Eval R@P1 is 0.056558363417569195 Best Eval R@P10 is 0.23916967509025272
+Evaluate (epoch 9) -- val loss = 5.46120930.
+Evaluate R@P1 = 0.0529.R@P10 = 0.2515.
+Best Eval R@P1 is 0.056558363417569195 Best Eval R@P10 is 0.23916967509025272
+Evaluate (epoch 10) -- val loss = 5.40058136.
+Evaluate R@P1 = 0.0539.R@P10 = 0.2533.
+Best Eval R@P1 is 0.056558363417569195 Best Eval R@P10 is 0.23916967509025272
+Evaluate (epoch 11) -- val loss = 5.34049177.
+Evaluate R@P1 = 0.0545.R@P10 = 0.2500.
+Best Eval R@P1 is 0.056558363417569195 Best Eval R@P10 is 0.23916967509025272
+Evaluate (epoch 12) -- val loss = 5.25299549.
+Evaluate R@P1 = 0.0551.R@P10 = 0.2662.
+Best Eval R@P1 is 0.056558363417569195 Best Eval R@P10 is 0.23916967509025272
+Evaluate (epoch 13) -- val loss = 5.15009356.
+Evaluate R@P1 = 0.0611.R@P10 = 0.2732.
+Best Eval R@P1 is 0.06107099879663057 Best Eval R@P10 is 0.273164861612515
+Evaluate (epoch 14) -- val loss = 5.07104158.
+Evaluate R@P1 = 0.0629.R@P10 = 0.2816.
+Best Eval R@P1 is 0.06287605294825512 Best Eval R@P10 is 0.2815884476534296
+Evaluate (epoch 15) -- val loss = 4.98087740.
+Evaluate R@P1 = 0.0608.R@P10 = 0.2900.
+Best Eval R@P1 is 0.06287605294825512 Best Eval R@P10 is 0.2815884476534296
+Evaluate (epoch 16) -- val loss = 4.90381241.
+Evaluate R@P1 = 0.0677.R@P10 = 0.2927.
+Best Eval R@P1 is 0.06768953068592058 Best Eval R@P10 is 0.292719614921781
+Evaluate (epoch 17) -- val loss = 4.81671762.
+Evaluate R@P1 = 0.0755.R@P10 = 0.3017.
+Best Eval R@P1 is 0.07551143200962696 Best Eval R@P10 is 0.3017448856799037
+Evaluate (epoch 18) -- val loss = 4.78360462.
+Evaluate R@P1 = 0.0761.R@P10 = 0.3084.
+Best Eval R@P1 is 0.07611311672683514 Best Eval R@P10 is 0.3083634175691937
+Evaluate (epoch 19) -- val loss = 4.71524286.
+Evaluate R@P1 = 0.0857.R@P10 = 0.3198.
+Best Eval R@P1 is 0.08574007220216606 Best Eval R@P10 is 0.31979542719614923
+Evaluate (epoch 20) -- val loss = 4.69586372.
+Evaluate R@P1 = 0.0818.R@P10 = 0.3111.
+Best Eval R@P1 is 0.08574007220216606 Best Eval R@P10 is 0.31979542719614923
+Evaluate (epoch 21) -- val loss = 4.70145178.
+Evaluate R@P1 = 0.0854.R@P10 = 0.3147.
+Best Eval R@P1 is 0.08574007220216606 Best Eval R@P10 is 0.31979542719614923
+Evaluate (epoch 22) -- val loss = 4.69114828.
+Evaluate R@P1 = 0.0842.R@P10 = 0.3246.
+Best Eval R@P1 is 0.08574007220216606 Best Eval R@P10 is 0.31979542719614923
+Evaluate (epoch 23) -- val loss = 4.68557835.
+Evaluate R@P1 = 0.0860.R@P10 = 0.3186.
+Best Eval R@P1 is 0.08604091456077016 Best Eval R@P10 is 0.3185920577617328
+Evaluate (epoch 24) -- val loss = 4.70597315.
+Evaluate R@P1 = 0.0833.R@P10 = 0.3228.
+Best Eval R@P1 is 0.08604091456077016 Best Eval R@P10 is 0.3185920577617328
+Evaluate (epoch 25) -- val loss = 4.72708750.
+Evaluate R@P1 = 0.0821.R@P10 = 0.3228.
+Best Eval R@P1 is 0.08604091456077016 Best Eval R@P10 is 0.3185920577617328
+Evaluate (epoch 26) -- val loss = 4.76866198.
+Evaluate R@P1 = 0.0854.R@P10 = 0.3192.
+Best Eval R@P1 is 0.08604091456077016 Best Eval R@P10 is 0.3185920577617328
+Evaluate (epoch 27) -- val loss = 4.79637527.
+Evaluate R@P1 = 0.0851.R@P10 = 0.3234.
+Best Eval R@P1 is 0.08604091456077016 Best Eval R@P10 is 0.3185920577617328
+Evaluate (epoch 28) -- val loss = 4.82580519.
+Evaluate R@P1 = 0.0821.R@P10 = 0.3168.
+Best Eval R@P1 is 0.08604091456077016 Best Eval R@P10 is 0.3185920577617328
+Evaluate (epoch 29) -- val loss = 4.87168741.
+Evaluate R@P1 = 0.0767.R@P10 = 0.3165.
+Best Eval R@P1 is 0.08604091456077016 Best Eval R@P10 is 0.3185920577617328
+Evaluate (epoch 30) -- val loss = 4.88226271.
+Evaluate R@P1 = 0.0788.R@P10 = 0.3135.
+Best Eval R@P1 is 0.08604091456077016 Best Eval R@P10 is 0.3185920577617328
+Evaluate (epoch 31) -- val loss = 4.91033697.
+Evaluate R@P1 = 0.0806.R@P10 = 0.3144.
+Best Eval R@P1 is 0.08604091456077016 Best Eval R@P10 is 0.3185920577617328

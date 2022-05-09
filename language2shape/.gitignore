@@ -18,7 +18,6 @@
 /occupancy_networks/im2mesh/utils/libmcubes/mcubes.cpp
 /occupancy_networks/im2mesh/utils/libsimplify/simplify_mesh.cpp
 /occupancy_networks/im2mesh/utils/libsimplify/build
-/openai_clip/finetune/results*
 /normalizing_flow_pyro_torch/
 /PointFlow/
 /realnvp_pytorch/
@@ -29,8 +28,6 @@
 /utils/results/
 /utils/pca_results/
 /utils/rtv_results/
-/pytorch_flows/results_map/
-/pytorch_flows/results/
 /mapping_flows/
 /pytorch_gan/
 /IM-NET/

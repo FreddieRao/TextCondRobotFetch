@@ -37,7 +37,7 @@ parser.add_argument('--text', type=str, default='a chair', help='free-form text 
 parser.add_argument('--use_txt_prefixs', action='store_true', help='Use mean of Txt Prefixs')
 parser.add_argument('--no_use_txt_prefixs', dest='use_txt_prefixs', action='store_false')
 parser.add_argument('--valid_cate_anno_path', type=str, default='./', help='Path to annotations of ShapeNet models with a valid subcategory')
-
+parser.add_argument('--dump_dir', type=str, default='./', help='Path to save shape feature')
 # Image Input
 parser.add_argument('--n_from_img', type=int, default=1, help='Number of Inference instances from clip image feature.')
 parser.add_argument('--img_gt_path', type=str, default='./', help='Path to GT Rendered ShapeNet Images')
@@ -134,6 +134,8 @@ if args.from_txt:
 
     print("Infering Shape Feature from Text Feature...")
     shape_features_list = generate_embed_from_clip_txt(args, nf_model, mlps, generate_conditioned, text_features_list)
-    for _ in shape_features_list:
-        print(_.shape)
-    exit(0)
+
+    for t_id, text, shape_feat in enumerate(zip(text_str_list, shape_features_list)):
+        np.save(os.join.path(args.dump_dir, 'shape_' + str(t_id).zfill(4) + '.npy'))
+        with open(os.join.path(args.dump_dir, 'text_' + str(t_id).zfill(4) + '.txt')) as f:
+            f.write(text)

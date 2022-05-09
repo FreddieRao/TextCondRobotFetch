@@ -1,0 +1,3 @@
+Text R-Precision@1 in Shape Embedding is 0.0
+Text R-Precision@5 in Shape Embedding is 0
+Total Inference Time is 141.9027943611145

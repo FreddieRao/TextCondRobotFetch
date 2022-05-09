@@ -1,7 +1,4 @@
 #!/bin/bash
-map_ckpt="$1"
-nf_ckpt="$2"
-
 python openai_clip/inference_grounding.py \
         --cate "chair" \
         --from_txt \
@@ -28,14 +25,4 @@ python openai_clip/inference_grounding.py \
         --input_size 512 \
         --use_mlp\
         --n_row 5\
-        # --n_from_img 0 \
-        # --img_gt_path "../../../data/render_ShapeNetCore.v1/03001627/1view_texture_ground_keyshot_4secs" \
-        # --shape_gt_path "occupancy_networks/data/ShapeNet/03001627" \
-        # --embed_feat_path "occupancy_networks/out/pointcloud/onet/pretrained/embed/03001627/embed_feats_train.pickle" \
-        # --embed_feat_test_path "occupancy_networks/out/pointcloud/onet/pretrained/embed/03001627/embed_feats_val.pickle" \
-        # --out_mesh_folder 'occupancy_networks/out/pointcloud/onet/pretrained/generation/meshes_from_z/conditional/'$2 \
-        # --quality \
-        # --clip_img_feat_path 'data/clip_img_feat_1view_texture_ground_keyshot.pickle'\
-        # --n_retrieval_clip 0\
-        # --n_retrieval_shape 1 \
-        # --quantity \
+        --dump_dir 'results'
