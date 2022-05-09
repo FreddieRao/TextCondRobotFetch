@@ -25,7 +25,7 @@ except:
 
 # Mesh IO
 import trimesh
-
+import transforms3d as t3d
 import matplotlib.pyplot as pyplot
 
 # ----------------------------------------
@@ -417,10 +417,52 @@ def write_oriented_bbox(scene_bbox, out_filename):
     scene = trimesh.scene.Scene()
     for box in scene_bbox:
         scene.add_geometry(convert_oriented_box_to_trimesh_fmt(box))        
-    
+        print(box)
+        exit(0)
     mesh_list = trimesh.util.concatenate(scene.dump())
     # save to ply file    
     # trimesh.io.export.export_mesh(mesh_list, out_filename, file_type='ply')
+    mesh_list.export(out_filename)
+    return
+
+def write_bbx_and_oriented_bbox(scene_bbox, out_foler):
+    """Export oriented (around Z axis) scene bbox to meshes
+    Args:
+        scene_bbox: (N x 7 numpy array): xyz pos of center and 3 lengths (dx,dy,dz)
+            and heading angle around Z axis.
+            Y forward, X right, Z upward. heading angle of positive X is 0,
+            heading angle of positive Y is 90 degrees.
+        out_filename: (string) filename
+    """
+    def heading2rotmat(heading_angle):
+        pass
+        rotmat = np.zeros((3,3))
+        rotmat[2,2] = 1
+        cosval = np.cos(heading_angle)
+        sinval = np.sin(heading_angle)
+        rotmat[0:2,0:2] = np.array([[cosval, -sinval],[sinval, cosval]])
+        return rotmat
+
+    def convert_oriented_box_to_trimesh_fmt(box):
+        ctr = box[:3]
+        lengths = box[3:6]
+        trns = np.eye(4)
+        trns[0:3, 3] = ctr
+        trns[3,3] = 1.0            
+        trns[0:3,0:3] = heading2rotmat(box[6])
+        box_trimesh_fmt = trimesh.creation.box(lengths, trns)
+        return box_trimesh_fmt
+
+    print("# {} objects detected!".format(len(scene_bbox)))
+    scene = trimesh.scene.Scene()
+    for b_idx, box in enumerate(scene_bbox):
+        out_path = os.path.join(out_foler, 'bbx_item_' + str(b_idx).zfill(3) + '.npz')
+        np.save(out_path, box)
+        scene.add_geometry(convert_oriented_box_to_trimesh_fmt(box))        
+    mesh_list = trimesh.util.concatenate(scene.dump())
+    # save to ply file    
+    # trimesh.io.export.export_mesh(mesh_list, out_filename, file_type='ply')
+    out_filename = os.path.join(out_foler, 'pred_confident_nms_bbox.ply')
     mesh_list.export(out_filename)
     return
 
@@ -435,10 +477,13 @@ def normalize_point_cloud(inputs):
     if C > 3:
         nor = inputs[:,:,3:]
 
-    centroid = np.mean(pc, axis=1, keepdims=True)
+    centroid = (np.amax(pc, axis=1) + np.amin(pc, axis=1)) / 2
     pc = inputs[:,:,:3] - centroid
-    furthest_distance = np.amax(
-        np.sqrt(np.sum(pc ** 2, axis=-1, keepdims=True)), axis=1, keepdims=True)
+    # Normalize to unite sphere
+    # furthest_distance = np.amax(
+    #     np.sqrt(np.sum(pc ** 2, axis=-1, keepdims=True)), axis=1, keepdims=True)
+    # Normalize to [-0.5, 0.5] cube
+    furthest_distance = np.amax(np.amax(pc, axis=1) - np.amin(pc, axis=1))
     pc = pc / furthest_distance
     if C > 3:
         return np.concatenate([pc,nor],axis=-1)
@@ -489,7 +534,9 @@ def get_pc_in_bounds(pc, scene_bbox, pred_confident_nms_class, out_filepath):
         pcs_trans = np.expand_dims(pcs_trans, axis=0)
         pcs_norm = normalize_point_cloud(pcs_trans)
         pcs_norm = np.squeeze(pcs_norm, axis=0)
-        print(np.max(pcs_norm), np.min(pcs_norm))
+        mat = t3d.euler.euler2mat(np.pi/2, 0, 0)
+        pcs_norm = pcs_norm @ mat
+        np.save(out_filepath + str(b_idx).zfill(3) + '_cls_' + str(pred_confident_nms_class[b_idx]) + '_npc_' + str(pcs_norm.shape[0]).zfill(5) + '.npy', pcs_norm)
         write_ply(pcs_norm, out_filepath + str(b_idx).zfill(3) + '_cls_' + str(pred_confident_nms_class[b_idx]) + '_npc_' + str(pcs_norm.shape[0]).zfill(5) + '.ply')
     return
 

@@ -6,6 +6,9 @@ Shape Detection with VoteNet:
 ```
 cd votenet_detection
 bash inference.sh
+
+# change --pc_path to change path to input point cloud
+# change --dump_dir to chage the directory to save results
 ```
 Which will return oriented pointclouds of objects in the scene.
 
@@ -26,6 +29,6 @@ bash shape_similarity.sh
 ```
 
 ## TODO
-- [ ] With Scanned input point cloud, extract object with Shape Detection Part.
+- [-] With Scanned input point cloud, extract object with Shape Detection Part.
 - [ ] Caculate Similarity Between Shapes and text-conditioned shape features.
 - [ ] Run a inference script for (1) point-cloud->shape list; (2)text->shape feautures; (3) find most similar shape in the shape list->output bbx.

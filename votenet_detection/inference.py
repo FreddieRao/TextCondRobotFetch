@@ -12,6 +12,7 @@ import numpy as np
 from datetime import datetime
 import argparse
 import importlib
+from plyfile import PlyData
 import torch
 import torch.nn as nn
 import torch.optim as optim
@@ -20,8 +21,10 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 ROOT_DIR = BASE_DIR
 sys.path.append(os.path.join(ROOT_DIR, 'models'))
 from ap_helper import APCalculator, parse_predictions, parse_groundtruths
+import transforms3d as t3d
 
 parser = argparse.ArgumentParser()
+parser.add_argument('--pc_path', default='black_chair/chair.ply', help='Path_to_pointcloud_files')
 parser.add_argument('--model', default='votenet', help='Model file name [default: votenet]')
 parser.add_argument('--dataset', default='sunrgbd', help='Dataset name. sunrgbd or scannet. [default: sunrgbd]')
 parser.add_argument('--checkpoint_path', default=None, help='Model checkpoint path [default: None]')
@@ -124,38 +127,40 @@ CONFIG_DICT = {'remove_empty_box': (not FLAGS.faster_eval), 'use_3d_nms': FLAGS.
     'conf_thresh': FLAGS.conf_thresh, 'dataset_config':DATASET_CONFIG}
 # ------------------------------------------------------------------------- GLOBAL CONFIG END
 
-def evaluate_one_epoch():
-    stat_dict = {}
-    net.eval() # set model to eval mode (for bn and dp)
-    for batch_idx, batch_data_label in enumerate(TEST_DATALOADER):
-        if batch_idx % 10 == 0:
-            print('Eval batch: %d'%(batch_idx))
-        for key in batch_data_label:
-            batch_data_label[key] = batch_data_label[key].to(device)
-        
-        # Forward pass
-        inputs = {'point_clouds': batch_data_label['point_clouds']}
+def read_ply(filename):
+    """ read XYZ point cloud from filename PLY file """
+    plydata = PlyData.read(filename)
+    pc = plydata['vertex'].data
+    pc_array = np.array([[x, y, z] for x,y,z in pc])
+    return pc_array
 
-        with torch.no_grad():
-            end_points = net(inputs)
-        
-        # for key in batch_data_label:
-        #     assert(key not in end_points)
-        #     end_points[key] = batch_data_label[key]
+def evaluate_one_scene(filename):
 
-        end_points['point_clouds'] = batch_data_label['point_clouds']
-        _ = parse_predictions(end_points, CONFIG_DICT) 
-        # Dump evaluation results for visualization
-        if batch_idx == 0:
-            MODEL.dump_instances(end_points, DUMP_DIR, DATASET_CONFIG)
+    # set model to eval mode (for bn and dp)
+    net.eval() 
 
-        exit(0)
+    # Read scene pointcloud
+    pc = read_ply(filename)
+    pc = np.expand_dims(pc, axis=0)
+    if pc.shape[-1] == 3:
+        pc = np.concatenate([pc, np.zeros((1, pc.shape[1], 1))], axis=-1)
+    pc = torch.from_numpy(pc).float().to(device)
+    
+    # Forward
+    inputs = {'point_clouds': pc }
+    with torch.no_grad():
+        end_points = net(inputs)
+
+    # Inference
+    end_points['point_clouds'] = pc
+    _ = parse_predictions(end_points, CONFIG_DICT) 
+    # Dump evaluation results for visualization
+    MODEL.dump_instances(end_points, DUMP_DIR, DATASET_CONFIG)
+
 def eval():
     log_string(str(datetime.now()))
-    # Reset numpy seed.
-    # REF: https://github.com/pytorch/pytorch/issues/5059
     np.random.seed()
-    evaluate_one_epoch()
+    evaluate_one_scene(FLAGS.pc_path)
 
 if __name__=='__main__':
     eval()

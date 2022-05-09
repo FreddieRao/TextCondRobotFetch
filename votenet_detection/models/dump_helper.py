@@ -11,7 +11,7 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 ROOT_DIR = os.path.dirname(BASE_DIR)
 sys.path.append(os.path.join(ROOT_DIR, 'utils'))
 import pc_util
-DUMP_CONF_THRESH = 0.5 # Dump boxes with obj prob larger than that.
+DUMP_CONF_THRESH = 0.1 # Dump boxes with obj prob larger than that.
 
 def softmax(x):
     ''' Numpy function for softmax'''
@@ -177,9 +177,9 @@ def dump_instances(end_points, dump_dir, config, inference_switch=False):
         objectness_prob = softmax(objectness_scores[i,:,:])[:,1] # (K,)
 
         # Dump various point clouds
-        pc_util.write_ply(pc, os.path.join(dump_dir, '%06d_pc.ply'%(idx_beg+i)))
-        pc_util.write_ply(seed_xyz[i,:,:], os.path.join(dump_dir, '%06d_seed_pc.ply'%(idx_beg+i)))
-
+        pc_util.write_ply(pc, os.path.join(dump_dir, 'pc.ply'))
+        pc_util.write_ply(seed_xyz[i,:,:], os.path.join(dump_dir, 'seed_pc.ply'))
+        
         # Dump predicted bounding boxes
         if np.sum(objectness_prob>DUMP_CONF_THRESH)>0:
             num_proposal = pred_center.shape[1]
@@ -188,10 +188,9 @@ def dump_instances(end_points, dump_dir, config, inference_switch=False):
                 obb = config.param2obb(pred_center[i,j,0:3], pred_heading_class[i,j], pred_heading_residual[i,j],
                                 pred_size_class[i,j], pred_size_residual[i,j])
                 obbs.append(obb)
-
             if len(obbs)>0:
                 obbs = np.vstack(tuple(obbs)) # (num_proposal, 7)
                 obbs_class = np.asarray(end_points['batch_pred_sem_cls'][i])
                 pred_confident_nms_class = obbs_class[np.logical_and(objectness_prob>DUMP_CONF_THRESH, pred_mask[i,:]==1)]
-                pc_util.write_oriented_bbox(obbs[np.logical_and(objectness_prob>DUMP_CONF_THRESH, pred_mask[i,:]==1),:], os.path.join(dump_dir, '%06d_pred_confident_nms_bbox.ply'%(idx_beg+i)))
-                pc_util.get_pc_in_bounds(pc, obbs[np.logical_and(objectness_prob>DUMP_CONF_THRESH, pred_mask[i,:]==1),:], pred_confident_nms_class, os.path.join(dump_dir, 'pc_batch%06d_item_'%(idx_beg+i)))
+                pc_util.write_bbx_and_oriented_bbox(obbs[np.logical_and(objectness_prob>DUMP_CONF_THRESH, pred_mask[i,:]==1),:], dump_dir)
+                pc_util.get_pc_in_bounds(pc, obbs[np.logical_and(objectness_prob>DUMP_CONF_THRESH, pred_mask[i,:]==1),:], pred_confident_nms_class, os.path.join(dump_dir, 'pc_item_'))
