@@ -19,6 +19,8 @@ from pointnetCls import PointNetCls
 import torch.nn.functional as F
 from tqdm import tqdm
 import random
+import open3d as o3d
+from normalizeData import normalizePoints
 
 parser = argparse.ArgumentParser()
 parser.add_argument(
@@ -97,7 +99,7 @@ classifier.cuda()
 
 num_batch = len(dataset) / opt.batchSize
 total_correct = 0
-for epoch in range(opt.nepoch):
+for epoch in range(1):
     
     for i, data in enumerate(valdataloader, 0):
         points_o, label = data
@@ -138,3 +140,45 @@ for epoch in range(opt.nepoch):
         if i%100 == 0:
             print('[%d: %d/%d] accuracy: %f' % (epoch, i, num_batch,  total_correct / (100* opt.batchSize)))
             total_correct = 0
+            print(pred)
+
+print("inferencing: ")
+path = r"E:\Code\IVL\shapeSearch\TextCondRobotFetch\votenet_detection\new_data\gray_chair\gray_chair\chair.ply"
+pcd1 = o3d.io.read_point_cloud(path)
+scanpoints = np.asarray(pcd1.points)
+print(scanpoints.shape)
+points = normalizePoints(scanpoints)
+points = points.reshape((1,points.shape[0],points.shape[1]))
+
+points = points_o[:,0:1024,:].to(torch.float32)
+points.to(torch.float32)
+points = points.transpose(2, 1)
+
+latents = np.zeros((1, latent_dim))
+latents[0] = latent_dict['46323c7986200588492d9da2668ec34c']
+z = torch.from_numpy(latents).to(torch.float32)
+points, target, z = points.cuda(), target.cuda(), z.cuda()
+classifier = classifier.train()
+pred, trans, trans_feat = classifier(points, z)
+pred = pred[0]
+pred_choice = pred.data.max(1)[1]
+print(pred,pred_choice)
+
+latents[0] = latent_dict['589e717feb809e7c1c5a16cc04345597']
+z = torch.from_numpy(latents).to(torch.float32)
+points, target, z = points.cuda(), target.cuda(), z.cuda()
+classifier = classifier.train()
+pred, trans, trans_feat = classifier(points, z)
+pred = pred[0]
+pred_choice = pred.data.max(1)[1]
+print(pred,pred_choice)
+
+latents[0] = latent_dict['ff9915c51ece4848cfc689934e433906']
+z = torch.from_numpy(latents).to(torch.float32)
+points, target, z = points.cuda(), target.cuda(), z.cuda()
+classifier = classifier.train()
+pred, trans, trans_feat = classifier(points, z)
+pred = pred[0]
+pred_choice = pred.data.max(1)[1]
+print(pred,pred_choice)
+
