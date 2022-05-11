@@ -70,7 +70,28 @@ class PartialScans(data.Dataset):
 # lst = data.files
 # points = data['points_r']
 # print(points.shape)
+class inferencePartialScans(data.Dataset):
+    def __init__(self, shapes_dir):
+        self.shapes_dir = shapes_dir
+        self.labels = [1,0]
 
+    def __len__(self):
+        return len(self.labels)
+
+    def __getitem__(self, pointcloud):
+        i = random.randint(0,2)
+        j = random.randint(0,7)
+        # print(self.labels[idx])
+        # for j in range(8):
+            # with Pool(5) as p:
+            #     p.map(save_partial,[0,1,2])
+            # for i in range(3):
+        shapes_path = os.path.join(self.shapes_dir)
+        # shapes_path = os.path.join(self.shapes_dir, self.labels[idx]+"/pointcloud.npz")
+        shape = np.load(shapes_path)['points_r']
+        # shape = np.load(shapes_path)['points']
+        label = self.labels
+        return pointcloud[0:1024,:],label
 
 
 
