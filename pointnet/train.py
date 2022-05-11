@@ -31,7 +31,7 @@ parser.add_argument(
     '--nepoch', type=int, default=250, help='number of epochs to train for')
 parser.add_argument('--outf', type=str, default='cls', help='output folder')
 parser.add_argument('--model', type=str, default='', help='model path')
-parser.add_argument('--checkpoint', type=str, default=' ', help="checkpoint dir")
+parser.add_argument('--checkpoint', type=str, default='/gpfs/data/ssrinath/ychen485/TextCondRobotFetch/pointnet/cls/cls_model_5.pth', help="checkpoint dir")
 parser.add_argument('--feature_transform', action='store_true', help="use feature transform")
 
 opt = parser.parse_args()
@@ -44,8 +44,8 @@ print("Random Seed: ", opt.manualSeed)
 random.seed(opt.manualSeed)
 torch.manual_seed(opt.manualSeed)
 
-latent_code = "/gpfs/data/ssrinath/ychen485/hyperPointnet/pointnet/03001627/ocnet_shapefeature_pc/embed_feats_trian.pickle"
-latent_code_test = "/gpfs/data/ssrinath/ychen485/hyperPointnet/pointnet/03001627/ocnet_shapefeature_pc/embed_feats_test.pickle"
+latent_code = "/gpfs/data/ssrinath/ychen485/TextCondRobotFetch/pointnet/03001627/ocnet_shapefeature_pc/embed_feats_train.pickle"
+latent_code_test = "/gpfs/data/ssrinath/ychen485/TextCondRobotFetch/pointnet/03001627/ocnet_shapefeature_pc/embed_feats_test.pickle"
 shape_folder = "/gpfs/data/ssrinath/ychen485/partialPointCloud/03001627"
 latent_dim = 512
 

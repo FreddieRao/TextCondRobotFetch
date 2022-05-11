@@ -134,8 +134,12 @@ if args.from_txt:
 
     print("Infering Shape Feature from Text Feature...")
     shape_features_list = generate_embed_from_clip_txt(args, nf_model, mlps, generate_conditioned, text_features_list)
-
-    for t_id, text, shape_feat in enumerate(zip(text_str_list, shape_features_list)):
-        np.save(os.join.path(args.dump_dir, 'shape_' + str(t_id).zfill(4) + '.npy'))
-        with open(os.join.path(args.dump_dir, 'text_' + str(t_id).zfill(4) + '.txt')) as f:
+    
+    for t_id, feats in enumerate(zip(text_str_list, shape_features_list)):
+        text = feats[0]
+        shape_feat = feats[1].cpu()
+        print(t_id, text, shape_feat)
+        np.save(os.path.join(args.dump_dir, 'shape_' + str(t_id).zfill(4)), shape_feat)
+        with open(os.path.join(args.dump_dir, 'text_' + str(t_id).zfill(4) + '.txt'), 'x') as f:
             f.write(text)
+        t_id = t_id+1

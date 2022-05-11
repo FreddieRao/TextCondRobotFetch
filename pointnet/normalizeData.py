@@ -6,7 +6,7 @@ Created on Tue May 10 19:16:49 2022
 """
 import numpy as np
 import copy
-import open3d as o3d
+# import open3d as o3d
 from numpy import linalg as LA
 import time
 import os
