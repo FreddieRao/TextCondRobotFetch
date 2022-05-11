@@ -2,3 +2,6 @@
 /ABATCH/
 /main_git_repo/
 /votenet_detection/results/
+__pycache__
+*.egg-info
+dist
