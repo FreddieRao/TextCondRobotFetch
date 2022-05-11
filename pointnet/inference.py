@@ -40,6 +40,11 @@ opt = parser.parse_args()
 
 
 def inference(scanpoints, latentcode, classifier):
+    opt.manualSeed = random.randint(1, 10000)  # fix seed
+    print("Random Seed: ", opt.manualSeed)
+    random.seed(opt.manualSeed)
+    torch.manual_seed(opt.manualSeed)
+
     points_r = normalizePoints(scanpoints)
     points = np.random.rand(3, 1024, 3)
     points[0] = points_r[0:1024, :]
@@ -90,10 +95,8 @@ def inference(scanpoints, latentcode, classifier):
 def get_text_model():
     classifier = PointNetCls(k=2, feature_transform=opt.feature_transform)
 
-    if opt.checkpoint != " ":
-        checkpoint = torch.load(opt.checkpoint)
-        classifier.load_state_dict(checkpoint)
-        pass
+    checkpoint = torch.load("../checkpoint.pth")
+    classifier.load_state_dict(checkpoint)
     if torch.cuda.is_available():
         classifier.cuda()
 
