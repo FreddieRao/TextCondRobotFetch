@@ -10,11 +10,10 @@ import open3d as o3d
 from numpy import linalg as LA
 import time
 import os
-import open3d.visualization.rendering as rendering
+# import open3d.visualization.rendering as rendering
 import math
 from multiprocessing import Pool
 import array
-
 
 
 def normalizePoints(scanpoints):
@@ -26,13 +25,25 @@ def normalizePoints(scanpoints):
     scanpoints = scanpoints/scanpoints[scanpoints[:, 1].argmax(),1]
     scanpoints = scanpoints-0.5*np.array([scanpoints[scanpoints[:, 0].argmax(),0],scanpoints[scanpoints[:, 1].argmax(),1],scanpoints[scanpoints[:, 2].argmax(),2]])
     np.random.shuffle(scanpoints)
-    pcd = o3d.geometry.PointCloud()
-    pcd.points = o3d.utility.Vector3dVector(scanpoints[0:1024,:])
-    R = pcd.get_rotation_matrix_from_xyz((3*(1)*np.pi / 2, 0*np.pi / 2, 1*np.pi / 2))
-    pcd.rotate(R, center=(0, 0, 0))
-    points = np.asarray(pcd.points)
+    # pcd = o3d.geometry.PointCloud()
+    # pcd.points = o3d.utility.Vector3dVector(scanpoints[0:1024,:])
+    # R = pcd.get_rotation_matrix_from_xyz((3*(1)*np.pi / 2, 0*np.pi / 2, 1*np.pi / 2))
+    R = np.array([[ 6.12323400e-17, -1.00000000e+00,  0.00000000e+00], [-1.83697020e-16, -1.12481984e-32,  1.00000000e+00], [-1.00000000e+00, -6.12323400e-17, -1.83697020e-16]])
+    # print(R)
+    # pcd.rotate(R, center=(0, 0, 0))
+    points = np.matmul(R,scanpoints.transpose()).transpose()
+    # pcd.points = o3d.utility.Vector3dVector(points[0:1024,:])
+
+    # points = np.asarray(pcd.points)
+    # o3d.visualization.draw_geometries([pcd]) 
+
     return points
 
+# print("inferencing: ")
+# path = r"E:\Code\IVL\shapeSearch\TextCondRobotFetch\votenet_detection\new_data\gray_chair\gray_chair\chair.ply"
+# pcd1 = o3d.io.read_point_cloud(path)
+# points_r = np.asarray(pcd1.points)
+# normalizePoints(points_r)
 
 
 

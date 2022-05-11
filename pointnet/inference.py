@@ -19,7 +19,7 @@ from pointnetCls import PointNetCls
 import torch.nn.functional as F
 from tqdm import tqdm
 import random
-import open3d as o3d
+# import open3d as o3d
 from normalizeData import normalizePoints
 
 parser = argparse.ArgumentParser()
@@ -143,9 +143,13 @@ for epoch in range(1):
             print(pred)
 
 print("inferencing: ")
-path = r"E:\Code\IVL\shapeSearch\TextCondRobotFetch\votenet_detection\new_data\gray_chair\gray_chair\chair.ply"
-pcd1 = o3d.io.read_point_cloud(path)
-scanpoints = np.asarray(pcd1.points)
+path = r"E:\Code\IVL\shapeSearch\TextCondRobotFetch\pointnet\testpoints.npz"
+data = np.load(path)
+# lst = data.files
+scanpoints = data['points_r']
+
+# pcd1 = o3d.io.read_point_cloud(path)
+# scanpoints = np.asarray(pcd1.points)
 print(scanpoints.shape)
 points = normalizePoints(scanpoints)
 points = points.reshape((1,points.shape[0],points.shape[1]))
