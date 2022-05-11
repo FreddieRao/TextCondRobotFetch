@@ -22,21 +22,22 @@ import random
 # import open3d as o3d
 from normalizeData import normalizePoints
 
-parser = argparse.ArgumentParser()
-parser.add_argument(
-    '--batchSize', type=int, default=3, help='input batch size')
-parser.add_argument(
-    '--num_points', type=int, default=2500, help='input batch size')
-parser.add_argument(
-    '--workers', type=int, help='number of data loading workers', default=2)
-parser.add_argument(
-    '--nepoch', type=int, default=250, help='number of epochs to train for')
-parser.add_argument('--outf', type=str, default='cls', help='output folder')
-parser.add_argument('--model', type=str, default='', help='model path')
-parser.add_argument('--checkpoint', type=str, default='/gpfs/data/ssrinath/ychen485/TextCondRobotFetch/pointnet/cls/cls_model_10.pth', help="checkpoint dir")
-parser.add_argument('--feature_transform', action='store_true', help="use feature transform")
 
-opt = parser.parse_args()
+def add_shape_arguments(parser):
+    parser.add_argument(
+        '--batchSize', type=int, default=3, help='input batch size')
+    parser.add_argument(
+        '--num_points', type=int, default=2500, help='input batch size')
+    parser.add_argument(
+        '--workers', type=int, help='number of data loading workers', default=2)
+    parser.add_argument(
+        '--nepoch', type=int, default=250, help='number of epochs to train for')
+    parser.add_argument('--outf', type=str, default='cls', help='output folder')
+    parser.add_argument('--model', type=str, default='', help='model path')
+    parser.add_argument('--checkpoint', type=str,
+                        default='/gpfs/data/ssrinath/ychen485/TextCondRobotFetch/pointnet/cls/cls_model_10.pth',
+                        help="checkpoint dir")
+    parser.add_argument('--feature_transform', action='store_true', help="use feature transform")
 
 
 def inference(scanpoints, latentcode, classifier):
@@ -92,10 +93,10 @@ def inference(scanpoints, latentcode, classifier):
     return haveTarget
 
 
-def get_text_model():
+def get_text_model(opt):
     classifier = PointNetCls(k=2, feature_transform=opt.feature_transform)
 
-    checkpoint = torch.load("../checkpoint.pth")
+    checkpoint = torch.load(opt.checkpoint)
     classifier.load_state_dict(checkpoint)
     if torch.cuda.is_available():
         classifier.cuda()
@@ -104,6 +105,9 @@ def get_text_model():
 
 
 if __name__ == "__main__":
+    parser = argparse.ArgumentParser()
+    add_shape_arguments(parser)
+    opt = parser.parse_args()
 
     print(opt)
 
