@@ -73,14 +73,15 @@ def inference(scanpoints, latentcode, classifier):
     haveTarget = False
     points = torch.from_numpy(points[:, 0:1024, :]).to(torch.float32)
     points = points.transpose(2, 1)
+    classifier = classifier.eval()
     for j in range(5):
         for i in range(10):
             latents = np.zeros((1, latent_dim))
             latents[0] = latentcode[j]
             z = torch.from_numpy(latents).to(torch.float32)
             points, z = points.cuda(), z.cuda()
-            classifier = classifier.eval()
-            pred, trans, trans_feat = classifier(points, z)
+            with torch.no_grad():
+                pred, trans, trans_feat = classifier(points, z)
             pred = pred[0]
             pred_choice = pred.data.max(1)[1].cpu()
             # print(torch.exp(pred),pred_choice)
