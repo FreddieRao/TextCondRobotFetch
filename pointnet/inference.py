@@ -69,12 +69,12 @@ def inference(scanpoints, latentcode, classifier):
     points_r = normalizePoints(scanpoints)
     points_r = scanpoints
     points[2] = points_r[0:1024, :]
-    ischair = 0
     haveTarget = False
     points = torch.from_numpy(points[:, 0:1024, :]).to(torch.float32)
     points = points.transpose(2, 1)
     classifier = classifier.eval()
     for j in range(5):
+    	  ischair = 0
         for i in range(10):
             latents = np.zeros((1, latent_dim))
             latents[0] = latentcode[j]
@@ -90,8 +90,7 @@ def inference(scanpoints, latentcode, classifier):
         
         if ischair - 7 > 0:
             haveTarget = True
-        ischair = 0
-        # if ischair > 7 :haveTarget = True
+        
     return haveTarget
 
 
