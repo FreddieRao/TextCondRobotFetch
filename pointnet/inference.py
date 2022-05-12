@@ -50,23 +50,23 @@ def inference(scanpoints, latentcode, classifier, opt):
     points = np.random.rand(3, 1024, 3)
     points[0] = points_r[0:1024, :]
 
-    idx = random.randint(0, len(label) - 1)
+    # idx = random.randint(0, len(label) - 1)
     i = random.randint(0, 2)
     j = random.randint(0, 7)
     path = shape_folder + "/" + label[t_idx] + "/pointcloud" + str(j) + str(i) + "_partial.npz"
     data = np.load(path)
     scanpoints = data['points_r']
-    points_r = normalizePoints(scanpoints)
+    # points_r = normalizePoints(scanpoints)
     points_r = scanpoints
     points[1] = points_r[0:1024, :]
 
-    idx = random.randint(0, len(label) - 1)
+    # idx = random.randint(0, len(label) - 1)
     i = random.randint(0, 2)
     j = random.randint(0, 7)
     path = shape_folder + "/" + label[t_idx] + "/pointcloud" + str(j) + str(i) + "_partial.npz"
     data = np.load(path)
     scanpoints = data['points_r']
-    points_r = normalizePoints(scanpoints)
+    # points_r = normalizePoints(scanpoints)
     points_r = scanpoints
     points[2] = points_r[0:1024, :]
     haveTarget = False
