@@ -48,6 +48,8 @@ def inference(scanpoints, latentcode, classifier, opt, ref_paths):
 
     points_r = normalizePoints(scanpoints)
     points = np.random.rand(3, 1024, 3)
+    if points_r.shape[0] < 1024:
+        return False
     points[0] = points_r[0:1024, :]
 
     for i, path in enumerate(ref_paths, 1):
