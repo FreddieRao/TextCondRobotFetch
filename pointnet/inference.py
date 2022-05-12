@@ -19,6 +19,7 @@ from pointnetCls import PointNetCls
 import torch.nn.functional as F
 from tqdm import tqdm
 import random
+from random import sample
 # import open3d as o3d
 from normalizeData import normalizePoints
 
@@ -52,16 +53,7 @@ def inference(scanpoints, latentcode, classifier, opt, ref_paths):
         return False
     points[0] = points_r[0:1024, :]
 
-    for i, path in enumerate(ref_paths, 1):
-        data = np.load(path)
-        scanpoints = data['points_r']
-        # points_r = normalizePoints(scanpoints)
-        points_r = scanpoints
-        points[i] = points_r[0:1024, :]
-
     haveTarget = False
-    points = torch.from_numpy(points[:, 0:1024, :]).to(torch.float32)
-    points = points.transpose(2, 1)
     classifier = classifier.eval()
     latent_dim = 512
     for j in range(5):
@@ -69,18 +61,27 @@ def inference(scanpoints, latentcode, classifier, opt, ref_paths):
         for i in range(10):
             latents = np.zeros((1, latent_dim))
             latents[0] = latentcode[j]
+            for k, path in enumerate(sample(ref_paths, 2), 1):
+                data = np.load(path)
+                scanpoints = data['points_r']
+                # points_r = normalizePoints(scanpoints)
+                points_r = scanpoints
+                points[k] = points_r[0:1024, :]
+
+            points_torch = torch.from_numpy(points[:, 0:1024, :]).to(torch.float32)
+            points_torch = points_torch.transpose(2, 1)
             z = torch.from_numpy(latents).to(torch.float32)
-            points, z = points.cuda(), z.cuda()
+            points_cuda, z = points_torch.cuda(), z.cuda()
             with torch.no_grad():
-                pred, trans, trans_feat = classifier(points, z)
+                pred, trans, trans_feat = classifier(points_cuda, z)
             pred = pred[0]
-            pred_choice = pred.data.max(1)[1].cpu()
-            # print(torch.exp(pred),pred_choice)
-            ischair = pred_choice[0] + ischair
+            pred = torch.nn.functional.softmax(pred, dim=1)
+            ischair = int((pred.data.max(0)[1][1] == 0).cpu()) + ischair
         print(ischair)
         
         if ischair - 7 > 0:
             haveTarget = True
+            break
         
     return haveTarget
 
