@@ -87,9 +87,10 @@ def inference(scanpoints, latentcode, classifier):
             # print(torch.exp(pred),pred_choice)
             ischair = pred_choice[0] + ischair
         print(ischair)
-        ischair = 0
+        
         if ischair - 7 > 0:
             haveTarget = True
+        ischair = 0
         # if ischair > 7 :haveTarget = True
     return haveTarget
 
