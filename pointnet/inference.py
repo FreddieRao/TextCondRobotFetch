@@ -40,7 +40,7 @@ def add_shape_arguments(parser):
     parser.add_argument('--feature_transform', action='store_true', help="use feature transform")
 
 
-def inference(scanpoints, latentcode, classifier):
+def inference(scanpoints, latentcode, classifier, opt):
     opt.manualSeed = random.randint(1, 10000)  # fix seed
     print("Random Seed: ", opt.manualSeed)
     random.seed(opt.manualSeed)
