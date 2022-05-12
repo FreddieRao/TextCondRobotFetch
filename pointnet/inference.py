@@ -40,7 +40,7 @@ def add_shape_arguments(parser):
     parser.add_argument('--feature_transform', action='store_true', help="use feature transform")
 
 
-def inference(scanpoints, latentcode, classifier, opt):
+def inference(scanpoints, latentcode, classifier, opt, ref_paths):
     opt.manualSeed = random.randint(1, 10000)  # fix seed
     print("Random Seed: ", opt.manualSeed)
     random.seed(opt.manualSeed)
@@ -50,29 +50,18 @@ def inference(scanpoints, latentcode, classifier, opt):
     points = np.random.rand(3, 1024, 3)
     points[0] = points_r[0:1024, :]
 
-    # idx = random.randint(0, len(label) - 1)
-    i = random.randint(0, 2)
-    j = random.randint(0, 7)
-    path = shape_folder + "/" + label[t_idx] + "/pointcloud" + str(j) + str(i) + "_partial.npz"
-    data = np.load(path)
-    scanpoints = data['points_r']
-    # points_r = normalizePoints(scanpoints)
-    points_r = scanpoints
-    points[1] = points_r[0:1024, :]
+    for i, path in enumerate(ref_paths, 1):
+        data = np.load(path)
+        scanpoints = data['points_r']
+        # points_r = normalizePoints(scanpoints)
+        points_r = scanpoints
+        points[i] = points_r[0:1024, :]
 
-    # idx = random.randint(0, len(label) - 1)
-    i = random.randint(0, 2)
-    j = random.randint(0, 7)
-    path = shape_folder + "/" + label[t_idx] + "/pointcloud" + str(j) + str(i) + "_partial.npz"
-    data = np.load(path)
-    scanpoints = data['points_r']
-    # points_r = normalizePoints(scanpoints)
-    points_r = scanpoints
-    points[2] = points_r[0:1024, :]
     haveTarget = False
     points = torch.from_numpy(points[:, 0:1024, :]).to(torch.float32)
     points = points.transpose(2, 1)
     classifier = classifier.eval()
+    latent_dim = 512
     for j in range(5):
         ischair = 0
         for i in range(10):
@@ -178,6 +167,26 @@ if __name__ == "__main__":
         pass
 
     classifier.cuda()
+
+    # # idx = random.randint(0, len(label) - 1)
+    # i = random.randint(0, 2)
+    # j = random.randint(0, 7)
+    # path = shape_folder + "/" + label[t_idx] + "/pointcloud" + str(j) + str(i) + "_partial.npz"
+    # data = np.load(path)
+    # scanpoints = data['points_r']
+    # # points_r = normalizePoints(scanpoints)
+    # points_r = scanpoints
+    # points[1] = points_r[0:1024, :]
+    #
+    # # idx = random.randint(0, len(label) - 1)
+    # i = random.randint(0, 2)
+    # j = random.randint(0, 7)
+    # path = shape_folder + "/" + label[t_idx] + "/pointcloud" + str(j) + str(i) + "_partial.npz"
+    # data = np.load(path)
+    # scanpoints = data['points_r']
+    # # points_r = normalizePoints(scanpoints)
+    # points_r = scanpoints
+    # points[2] = points_r[0:1024, :]
 
     num_batch = len(dataset) / opt.batchSize
     total_correct = 0
