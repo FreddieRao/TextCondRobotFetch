@@ -74,7 +74,7 @@ def inference(scanpoints, latentcode, classifier):
     points = points.transpose(2, 1)
     classifier = classifier.eval()
     for j in range(5):
-    	  ischair = 0
+        ischair = 0
         for i in range(10):
             latents = np.zeros((1, latent_dim))
             latents[0] = latentcode[j]
