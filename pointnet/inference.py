@@ -79,7 +79,7 @@ def inference(scanpoints, latentcode, classifier, opt, ref_paths):
             ischair = int((pred.data.max(0)[1][1] == 0).cpu()) + ischair
         print(ischair)
         
-        if ischair - 7 > 0:
+        if ischair - 4 > 0:
             haveTarget = True
             break
         
