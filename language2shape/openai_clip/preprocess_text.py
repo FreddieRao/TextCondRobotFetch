@@ -18,10 +18,10 @@ def get_all_valid_data_text2shape():
     labels = []
     texts = []
 
-    for index, row in df.iterrows():
-        if str(row['category']) == 'Table':
-            ids_0.append(str(row['modelId']))
-            texts.append(str(row['description']))
+    for row in df.itertuples():
+        if str(getattr(row, 'category')) == 'Table':
+            ids_0.append(str(getattr(row, 'modelId')))
+            texts.append(str(getattr(row, 'description')))
     print(len(texts))
     return ids_0, texts
 
@@ -38,10 +38,10 @@ def get_all_valid_data_subcate(df):
     labels = []
     texts = []
 
-    for index, row in df.iterrows():
-        if str(row['category']) == 'Chair':
-            ids_0.append(str(row['modelId']))
-            texts.append(str(row['description']))
+    for row in df.itertuples():
+        if str(getattr(row, 'category')) == 'Chair':
+            ids_0.append(str(getattr(row, 'modelId')))
+            texts.append(str(getattr(row, 'description')))
     print(len(texts))
     return ids_0, texts
 
